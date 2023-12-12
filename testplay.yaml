@@ -1,0 +1,14 @@
+# This playbook is designed to install the 'fortune' and 'cowsay' packages on all target machines
+- name: test play - install the cow       # Descriptive name of the play
+  hosts: targets                          # Specifies that this play will run on all hosts in the 'targets' group
+  remote_user: remoteadmin                # Defines the user to use for SSH connections
+
+  tasks:  # Start of the tasks section, where individual tasks are defined
+    - name: fortune and cowsay package install  # Descriptive name of the task
+      apt:  # Specifies the apt module, used for package management in Debian/Ubuntu systems
+        name:  # Defines the packages to be installed
+          - fortune  # The 'fortune' package, which displays random epigrams
+          - cowsay   # The 'cowsay' package, a program that generates ASCII pictures of a cow with a message
+        state: present   # Ensures the packages are installed
+        update_cache: yes  # Updates the package cache before installing, ensuring the latest version is installed
+

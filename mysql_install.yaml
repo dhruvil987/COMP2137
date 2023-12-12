@@ -1,0 +1,26 @@
+# This is the start of the playbook. It defines a play for installing MySQL on target2.
+- name: Install MySQL on target2  # Descriptive name of the play
+  hosts: target2                 # Specifies that this play will run on target2
+  remote_user: remoteadmin       # Defines the user to use for SSH connections
+
+  tasks:  # Start of the tasks section, where individual tasks are defined
+    - name: Install MySQL        # Descriptive name of the task
+      apt:                       # Specifies the apt module (used for package management in Debian/Ubuntu systems)
+        name: mysql-server       # Defines the package to install, in this case, mysql-server
+        state: present           # Ensures the package is installed
+
+    - name: Enable UFW firewall  # Task to enable the UFW (Uncomplicated Firewall)
+      ufw:                       # Uses the ufw module to manage the firewall settings
+        state: enabled           # Sets the firewall state to enabled
+
+    - name: Allow SSH            # Task to allow SSH through the firewall
+      ufw:                       # Again, using the ufw module
+        rule: allow              # Specifies the rule type, 'allow' in this case
+        name: OpenSSH            # Indicates the service for which the rule is being set, here it's OpenSSH
+
+    - name: Allow MySQL on port 3306 # Task to allow MySQL traffic through the firewall
+      ufw:                         # Using the ufw module again
+        rule: allow                # Setting the rule to 'allow'
+        port: '3306'               # Specifies the port number for MySQL
+        proto: tcp                 # Defines the protocol type, which is TCP for MySQL
+

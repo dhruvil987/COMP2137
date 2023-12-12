@@ -1,0 +1,26 @@
+# This playbook is designed to install Apache2 on target1
+- name: Install Apache2 on target1  # Descriptive name of the play
+  hosts: target1                   # Specifies that this play will run on target1
+  remote_user: remoteadmin         # Defines the user to use for SSH connections
+
+  tasks:  # Start of the tasks section, where individual tasks are defined
+    - name: Install Apache2        # Descriptive name of the task
+      apt:                         # Specifies the apt module (used for package management in Debian/Ubuntu systems)
+        name: apache2              # Defines the package to install, in this case, apache2
+        state: present             # Ensures the package is installed
+
+    - name: Enable UFW firewall    # Task to enable the UFW (Uncomplicated Firewall)
+      ufw:                         # Uses the ufw module to manage the firewall settings
+        state: enabled             # Sets the firewall state to enabled
+
+    - name: Allow SSH              # Task to allow SSH through the firewall
+      ufw:                         # Again, using the ufw module
+        rule: allow                # Specifies the rule type, 'allow' in this case
+        name: OpenSSH              # Indicates the service for which the rule is being set, here it's OpenSSH
+
+    - name: Allow HTTP on port 80  # Task to allow HTTP traffic through the firewall on port 80
+      ufw:                         # Using the ufw module again
+        rule: allow                # Setting the rule to 'allow'
+        port: '80'                 # Specifies the HTTP port number, which is 80
+        proto: tcp                 # Defines the protocol type, which is TCP for HTTP
+
